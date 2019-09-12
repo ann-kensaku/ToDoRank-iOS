@@ -13,6 +13,10 @@
 		B64A5421230576DF004F48AC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B64A541F230576DF004F48AC /* LaunchScreen.storyboard */; };
 		B64A542C230576E0004F48AC /* ToDoRank_iOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B64A542B230576E0004F48AC /* ToDoRank_iOSTests.swift */; };
 		B64A5437230576E0004F48AC /* ToDoRank_iOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B64A5436230576E0004F48AC /* ToDoRank_iOSUITests.swift */; };
+		B6A479CA232A7B250032C31E /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6A479C9232A7B250032C31E /* Realm.framework */; };
+		B6A479CB232A7B250032C31E /* Realm.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B6A479C9232A7B250032C31E /* Realm.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B6A479CE232A7B2B0032C31E /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6A479CD232A7B2B0032C31E /* RealmSwift.framework */; };
+		B6A479CF232A7B2B0032C31E /* RealmSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B6A479CD232A7B2B0032C31E /* RealmSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B6AC550F2307CF86004BD41A /* ToDoRankViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6AC550E2307CF86004BD41A /* ToDoRankViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -33,6 +37,21 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		B6A479CC232A7B250032C31E /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				B6A479CF232A7B2B0032C31E /* RealmSwift.framework in Embed Frameworks */,
+				B6A479CB232A7B250032C31E /* Realm.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		B64A5413230576DC004F48AC /* ToDoRank-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ToDoRank-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B64A5416230576DC004F48AC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -46,6 +65,8 @@
 		B64A5432230576E0004F48AC /* ToDoRank-iOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ToDoRank-iOSUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B64A5436230576E0004F48AC /* ToDoRank_iOSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoRank_iOSUITests.swift; sourceTree = "<group>"; };
 		B64A5438230576E0004F48AC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B6A479C9232A7B250032C31E /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = "../../../../realm-swift-3.17.3/ios/swift-10.3/Realm.framework"; sourceTree = "<group>"; };
+		B6A479CD232A7B2B0032C31E /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RealmSwift.framework; path = "../../../../realm-swift-3.17.3/ios/swift-10.3/RealmSwift.framework"; sourceTree = "<group>"; };
 		B6AC550E2307CF86004BD41A /* ToDoRankViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoRankViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -54,6 +75,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B6A479CE232A7B2B0032C31E /* RealmSwift.framework in Frameworks */,
+				B6A479CA232A7B250032C31E /* Realm.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -77,6 +100,8 @@
 		B64A540A230576DC004F48AC = {
 			isa = PBXGroup;
 			children = (
+				B6A479CD232A7B2B0032C31E /* RealmSwift.framework */,
+				B6A479C9232A7B250032C31E /* Realm.framework */,
 				B64A5415230576DC004F48AC /* ToDoRank-iOS */,
 				B64A542A230576E0004F48AC /* ToDoRank-iOSTests */,
 				B64A5435230576E0004F48AC /* ToDoRank-iOSUITests */,
@@ -135,6 +160,8 @@
 				B64A540F230576DC004F48AC /* Sources */,
 				B64A5410230576DC004F48AC /* Frameworks */,
 				B64A5411230576DC004F48AC /* Resources */,
+				B6A479CC232A7B250032C31E /* Embed Frameworks */,
+				B6A479D0232A7B560032C31E /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -250,6 +277,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		B6A479D0232A7B560032C31E /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nbash \"${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework/strip-frameworks.sh\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		B64A540F230576DC004F48AC /* Sources */ = {
@@ -434,6 +481,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = WSQS2G2C85;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[arch=*]" = "/realm-swift-3.17.3/ios/swift-10.3";
 				INFOPLIST_FILE = "ToDoRank-iOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -452,6 +504,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = WSQS2G2C85;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[arch=*]" = "/realm-swift-3.17.3/ios/swift-10.3";
 				INFOPLIST_FILE = "ToDoRank-iOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -469,6 +526,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				"BUNDLE_LOADER[arch=*]" = "//:configuration = Debug\nFRAMEWORK_SEARCH_PATHS[arch=*] = /realm-swift-3.17.3/ios/swift-10.3\n\n//:completeSettings = none\n//:configuration = Debug\nFRAMEWORK_SEARCH_PATHS[arch=*] = /realm-swift-3.17.3/ios/swift-10.3\n\n//:completeSettings = none\n";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = WSQS2G2C85;
 				INFOPLIST_FILE = "ToDoRank-iOSTests/Info.plist";
