@@ -6,31 +6,39 @@
 //  Copyright © 2019 yuki. All rights reserved.
 //
 
-import Foundation
 import RealmSwift
 import UIKit
 
-class ToDoListViewController: UITableViewController {
+class ToDoRankViewController: UITableViewController {
     //Realmをインスタンス化
     let realm = try! Realm()
-    // この配列に作ったアイテムを追加していく
-    var itemArray: Results<Item>!
+    // このDB内の唯一の配列に作ったアイテムを追加していく
+    var itemList: List<Item>!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        itemArray = realm.objects(Item.self)
+        //もしもwrapedItemが空っぽならば、実態を作る。
+        if(realm.objects(WrapedItem.self).count == 0){
+            let newWrapedItem = WrapedItem()
+            try! realm.write{
+                realm.add(newWrapedItem)
+            }
+        }
+        //基本はこの実態のlistに要素を入れていく
+        itemList = realm.objects(WrapedItem.self).first?.list
     }
     
     // セルの数が指itemArray（の長さ）によって指定される
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return itemArray.count
+        return itemList.count
     }
     
     //それぞれのセルについてどーするか
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         //Main.storybordのToDoItemCellがここのcell
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoCell", for: indexPath)
-        let item = itemArray[indexPath.row]
+        let item = itemList[indexPath.row]
+        
         cell.textLabel?.text = item.title
         //doneがtrueならチェックマーク、falseならなし
         cell.accessoryType = item.done ? .checkmark : .none
@@ -42,7 +50,7 @@ class ToDoListViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         try! self.realm.write {
             // チェックマーク
-            itemArray[indexPath.row].done = !itemArray[indexPath.row].done
+            itemList[indexPath.row].done = !itemList[indexPath.row].done
         }
         // リロードして変えた部分だけに反映
         self.tableView.reloadRows(at: [indexPath], with: .automatic)
@@ -63,7 +71,7 @@ class ToDoListViewController: UITableViewController {
                 // 変更される名前が入力されていれば
                 if (textField.text ?? "").count > 0{
                     try! self.realm.write {
-                        self.itemArray[indexPath.row].title = textField.text!
+                        self.itemList[indexPath.row].title = textField.text!
                     }
                     // リロードしてUIに反映
                     self.tableView.reloadRows(at: [indexPath], with: .automatic)
@@ -73,7 +81,7 @@ class ToDoListViewController: UITableViewController {
             
             alert.addTextField { (alertTextField) in
                 //元の名前が入ってる
-                alertTextField.placeholder = self.itemArray[indexPath.row].title
+                alertTextField.placeholder = self.itemList[indexPath.row].title
                 //text内容じゃなくてそのものが同一だからセーフ
                 textField = alertTextField
                 
@@ -86,72 +94,32 @@ class ToDoListViewController: UITableViewController {
         edit_action.backgroundColor = UIColor.lightGray
         
         let delete_action = UITableViewRowAction(style: .default, title: "Delete"){ (action, indexPath) in
-            //データベース上の削除
+            
             try! self.realm.write {
-                self.realm.delete(self.itemArray[indexPath.row])
+                //削除対象より下のrankを1上げる（だから配列的に上がるので-1する）
+                for i in (indexPath.row + 1)..<self.itemList.count{
+                    self.itemList[i].rank -=  1
+                }
+                //データベース上の削除
+                self.itemList.remove(at:indexPath.row)
             }
             //表示上のアイテム削除処理
             let indexPaths = [indexPath]
             tableView.deleteRows(at: indexPaths, with: .automatic)
-            //表示は平気だけど削除でrealmの中がごちゃってるからソートしよう
-            self.itemArray = self.itemArray.sorted(byKeyPath: "rank", ascending: true)
         }
         
         return [delete_action,edit_action]
     }
     
-    // 項目追加ボタンが押された時に実行される処理
-    //これがstoryboardの+と紐付けされている
-    @IBAction func addButtonPressed(_ sender: Any) {
-        //追加するアイテムの名前入れる
-        var nameTextField = UITextField()
-        var rankTextField = UITextField()
-        //popup、かっこいい
-        let alert = UIAlertController(title: "新しいアイテムを追加", message: "", preferredStyle: .alert)
-        let action = UIAlertAction(title: "リストに追加", style: .default) { (action) in
-            // 追加されるアイテム
-            let newItem = Item()
-            //追加アイテムを聞かれた時に文字を入れた場合だけ処理(rankは今後の実装で変わる処理なので、暫定的に常に良い感じに入力されてると仮定しエラーは考えない)
-            if (nameTextField.text ?? "").count > 0{
-                newItem.title = nameTextField.text!
-                newItem.rank = Int(rankTextField.text!)!
-                try! self.realm.write{
-                    // アイテム追加処理
-                    self.realm.add(newItem)
-                    //realmの中がごちゃってるからソートしよう
-                    self.itemArray = self.itemArray.sorted(byKeyPath: "rank", ascending: true)
-                }
-                //sortされたitemArrayから今回のrankの場所を得る（若干2度手間感あるが）
-                let searchedPath = self.binarySearch(rank: newItem.rank)!
-                self.tableView.insertRows(at: [IndexPath(row: searchedPath , section: 0)], with: .automatic)
-            } else {//入力されなきゃ何もしない
-            }
-        }
-        
-        alert.addTextField { (alertTextField) in
-            alertTextField.placeholder = "新しいアイテム"
-            //text内容じゃなくてそのものが同一だからセーフ
-            nameTextField = alertTextField
-        }
-        alert.addTextField { (alertTextField) in
-            alertTextField.placeholder = "ランク"
-            //text内容じゃなくてそのものが同一だからセーフ
-            rankTextField = alertTextField
-        }
-        alert.addAction(action)
-        //かっこいい
-        present(alert, animated: true, completion: nil)
-    }
-
     //挿入位置を求めるために二分探索
     func binarySearch(rank:Int)->Int?{
         var low = 0
-        var high = itemArray.count - 1
+        var high = itemList.count - 1
         while (true) {
             //真ん中を取り出す
             let mid = (low + high) / 2
             //値をとりだす
-            let value = itemArray[mid].rank
+            let value = itemList[mid].rank
             print(value)
             print(rank)
             //とりだした値が、探したい値よりおおきいかちいさいかをしらべる
@@ -169,6 +137,9 @@ class ToDoListViewController: UITableViewController {
 
 }
 
+class WrapedItem: Object{
+    let list = List<Item>()
+}
 // アイテムの型、ToDo項目のtitleとチェック(done)の有無
 class Item: Object  {
     @objc dynamic var title = ""
